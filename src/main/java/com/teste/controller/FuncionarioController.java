@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.teste.dto.FuncionarioDTO;
@@ -22,10 +23,14 @@ import com.teste.model.Funcionario;
 import com.teste.repository.DepartamentoRepository;
 import com.teste.service.FuncionarioService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
+@RequestMapping("/funcionarios")
+@Api(value = "Funcionario", description = "CRUD de funcionarios")
 public class FuncionarioController {
 
 	@Autowired
@@ -39,11 +44,17 @@ public class FuncionarioController {
 		this.repositoryDepartamento = repositoryDepartamento;
 	}
 
+	/**
+	 * Busca todos os funcionarios
+	 * @return
+	 */
+	@ApiOperation(value = "Busca todos os funcionarios")
 	@ApiResponses(value = {
 		    @ApiResponse(code = 200, message = "Funcionario encontrado com sucesso"),
 		    @ApiResponse(code = 400, message = "Funcionario não enontrado"),
+		    
 	})
-	@GetMapping("/funcionarios/all")
+	@GetMapping("/all")
 	public ResponseEntity<?> getAll() {
 
 		try {
@@ -60,11 +71,17 @@ public class FuncionarioController {
 		}
 	}
 
+	/**
+	 * Salva um novo funcionario
+	 * @param newFuncionario - Objeto do novo funcionario
+	 * @return
+	 */
+	@ApiOperation(value = "Salva um novo funcionario")
 	@ApiResponses(value = {
 		    @ApiResponse(code = 200, message = "Funcionario salvo com sucesso"),
 		    @ApiResponse(code = 500, message = "Erro ao Salvar"),
 	})
-	@PostMapping("/funcionarios")
+	@PostMapping
 	public ResponseEntity<?> create(@RequestBody Funcionario newFuncionario) {
 		try {
 			return new ResponseEntity<>(convertFuncionarioToDto(service.save(newFuncionario)), HttpStatus.OK);
@@ -73,11 +90,17 @@ public class FuncionarioController {
 		}
 	}
 
+	/**
+	 * Busca o funcionario por id
+	 * @param id - id do funionario
+	 * @return
+	 */
+	@ApiOperation(value = "Busca o funcionario por id")
 	@ApiResponses(value = {
 		    @ApiResponse(code = 200, message = "Funcionario encontrado com sucesso"),
 		    @ApiResponse(code = 400, message = "Funcionario não enontrado"),
 	})
-	@GetMapping("/funcionarios/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> getById(@PathVariable Integer id) {
 		Funcionario funcionario = null;
 		try {
@@ -89,12 +112,19 @@ public class FuncionarioController {
 		return new ResponseEntity<>(convertFuncionarioToDto(funcionario), HttpStatus.OK);
 	}
 
+	/**
+	 * Altera o funionario por id
+	 * @param newFuncionario - objeto do funcionario a ser alterado
+	 * @param id - Id do funcionario a buscar
+	 * @return
+	 */
+	@ApiOperation(value = "Altera o funionario por id")
 	@ApiResponses(value = {
 		    @ApiResponse(code = 200, message = "Funcionario alterado com sucesso"),
 		    @ApiResponse(code = 400, message = "Funcionario não enontrado"),
 		    @ApiResponse(code = 500, message = "Erro ao Salvar"),
 	})
-	@PutMapping("/funcionarios/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@RequestBody Funcionario newFuncionario, @PathVariable Integer id) {
 
 		Funcionario funcionario = null;
@@ -108,17 +138,29 @@ public class FuncionarioController {
 		return new ResponseEntity<>(convertFuncionarioToDto(funcionario), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/funcionarios/{id}")
+	/**
+	 *  Deleta funionario
+	 * @param id - id do funionario
+	 */
+	@ApiOperation(value = "Deleta funionario")
+	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Integer id) {
 		service.deleteById(id);
 	}
 
+	/**
+	 * Altera o departamento de um funcionario
+	 * @param id - id do funcionario
+	 * @param nomeDerpartamento - nome do novo departamaneto do funionario
+	 * @return
+	 */
+	@ApiOperation(value = "Altera o departamento de um funcionario")
 	@ApiResponses(value = {
 		    @ApiResponse(code = 200, message = "Funcionario alterado com sucesso"),
 		    @ApiResponse(code = 400, message = "Funcionario não enontrado"),
 		    @ApiResponse(code = 500, message = "Erro ao Salvar"),
 	})
-	@PutMapping("/funcionarios/{id}/departamento/nome/{nomeDerpartamento}")
+	@PutMapping("/{id}/departamento/nome/{nomeDerpartamento}")
 	public ResponseEntity<?> updateDepartamento(@PathVariable Integer id, @PathVariable String nomeDerpartamento) {
 		
 		Funcionario funcionario = null;
@@ -135,6 +177,11 @@ public class FuncionarioController {
 		
 	}
 
+	/**
+	 * converte a entety do funionario em DTO
+	 * @param func - objeto do funcionario
+	 * @return
+	 */
 	private FuncionarioDTO convertFuncionarioToDto(Funcionario func) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 

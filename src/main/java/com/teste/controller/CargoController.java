@@ -42,6 +42,10 @@ public class CargoController {
     this.assembler = assembler;
   }
 
+  /**
+   * 
+   * @return
+   */
 	@ApiResponses(value = {
 		    @ApiResponse(code = 200, message = "Cargo salvo com sucesso"),
 		    @ApiResponse(code = 400, message = "Cargo não enontrado"),

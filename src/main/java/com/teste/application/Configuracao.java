@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.teste.model.Cargo;
 import com.teste.model.Departamento;
@@ -24,12 +23,13 @@ import com.teste.repository.CargoRepository;
 import com.teste.repository.DepartamentoRepository;
 import com.teste.service.FuncionarioService;
 
+import io.swagger.models.Contact;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @Configuration
 @ComponentScan({ "com.teste.controller" })
@@ -112,16 +112,25 @@ public class Configuracao {
 
 		};
 	}
-    
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-            .select()
-           .apis(RequestHandlerSelectors.basePackage("com.teste.controller"))
-            .paths(PathSelectors.any())
-            .build()
-            .useDefaultResponseMessages(false);
-    }
+
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.teste.controller"))
+				.paths(PathSelectors.any())
+				.build()
+				.useDefaultResponseMessages(false)
+				.apiInfo(metaInfo());
+	}
+
+	private ApiInfo metaInfo() {
+
+		ApiInfo apiInfo = new ApiInfo("Projeto de teste",
+				"Uma Aplicação teste contendo: Criar crud de funcionário; Consulta de funcionários de um departamento; Histórico dos departamentos que o usuário trabalhou; Chefe do departamento.",
+				"1.0", "", "Mauro Gualter", "maurogualter@gmnail.com", "https://www.apache.org/licesen.html");
+		return apiInfo;
+	}
+	
 	
 
 }
