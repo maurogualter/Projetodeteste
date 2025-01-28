@@ -1,4 +1,4 @@
-## Application Information
+# Application Information
 It`s a Java Spring boot aplication to test it run the class: com.teste.application.Aplicacao
 
 ## Application swagger
@@ -9,7 +9,7 @@ https://github.com/maurogualter/Projetodeteste.git
 
 #####################################################################
 
-## Informação do Aplicação
+# Informação do Aplicação
 
 É uma aplicação Java Spring boot para testá-la execute a classe: com.teste.application.Aplicacao
 
